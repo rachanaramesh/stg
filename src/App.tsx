@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {FullFeaturedCrudGrid} from './components/UserGrid';
+import { applyMiddleware, Store } from "redux";
+import { legacy_createStore as createStore } from 'redux';
+import { Provider } from "react-redux"
+import {thunk} from "redux-thunk"
+import reducer from "./store/locationState";
+import { updateLocationCount } from "./store/actionCreators";
+import LocationToolbar from './components/LocationToolbar';
+
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+});
+
+const store: Store<LocationState, LocationAction> & {
+  dispatch: DispatchType
+} = createStore(reducer, applyMiddleware(thunk))
 
 function App() {
   return (
+    <Provider store={store}>
+    <ThemeProvider theme={lightTheme}>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <LocationToolbar />
+      <div style={{padding: "1em"}}><FullFeaturedCrudGrid updateLocationCount={updateLocationCount} /></div>
     </div>
+    </ThemeProvider>
+    </Provider>
   );
 }
 

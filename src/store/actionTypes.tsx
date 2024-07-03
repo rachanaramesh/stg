@@ -1,0 +1,1 @@
+export const LOCATION_COUNT = "LOCATION_COUNT";
